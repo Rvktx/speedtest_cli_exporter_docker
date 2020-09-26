@@ -10,9 +10,9 @@ def perform_test():
     dl_speed_value, up_speed_value, ping_value, jitter_value = (0, 0, 0, 0)
 
     if args.server == 0:
-        result = subprocess.run(['speedtest'], stdout=subprocess.PIPE).stdout.decode('UTF-8')
+        result = subprocess.run(['speedtest', '-u', 'bps'], stdout=subprocess.PIPE).stdout.decode('UTF-8')
     else:
-        result = subprocess.run(['speedtest', '-s', str(args.server)], stdout=subprocess.PIPE).stdout.decode('UTF-8')
+        result = subprocess.run(['speedtest', '-u', 'bps', '-s', str(args.server)], stdout=subprocess.PIPE).stdout.decode('UTF-8')
     print(result)
 
     if 'ISP' in result:
