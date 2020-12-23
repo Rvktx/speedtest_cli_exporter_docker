@@ -18,9 +18,11 @@ I couldn't find anything better so I wrote this simple script to run a new offic
     Speedtest exporter for prometheus.
     
     optional arguments:
-      -h, --help       show this help message and exit
-      --port PORT      Port to listen for requests.
-      --server SERVER  Number of server to test.
+      -h, --help        show this help message and exit
+      --port PORT       Port to listen for requests.
+      --server SERVER   Number of server to test.
+      --license BOOL    You need to set this to True in order to accept Ookla's license and use this exporter.
+      --gdpr BOOL       You need to set this to True in order to accept Ookla's GDPR and use this exporter.
 
 ### Docker
 
@@ -30,6 +32,8 @@ Environmental variables:
 
 * PORT - Port to listen on; Also change TCP_PORT to expose.
 * SERVER - ID number of the server to run the test on.
+* LICENSE - You need to set this to True in order to accept Ookla's license and use this exporter.
+* GDPR - You need to set this to True in order to accept Ookla's GDPR and use this exporter.
 
 ### How to find server ID?
 

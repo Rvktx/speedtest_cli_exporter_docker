@@ -9,10 +9,11 @@ def perform_test():
     print('Test starting...')
     dl_speed_value, up_speed_value, ping_value, jitter_value = (0, 0, 0, 0)
 
-    if args.server == 0:
-        result = subprocess.run(['speedtest', '-u', 'bps'], stdout=subprocess.PIPE).stdout.decode('UTF-8')
-    else:
-        result = subprocess.run(['speedtest', '-u', 'bps', '-s', str(args.server)], stdout=subprocess.PIPE).stdout.decode('UTF-8')
+    command = ['speedtest', '--accept-license', '--accept-gdpr', '-u', 'bps']
+    if args.server != 0:
+        command += ['-s', str(args.server)]
+
+    result = subprocess.run(command, stdout=subprocess.PIPE).stdout.decode('UTF-8')
     print(result)
 
     if 'ISP' in result:
@@ -55,17 +56,25 @@ class SpeedtestCollector(object):
 
 
 def main():
-    REGISTRY.register(SpeedtestCollector())
-    start_http_server(args.port)
-    print('listening on port {}.'.format(args.port))
-    while True:
-        time.sleep(1)
+    if args.license.lower() == 'true' and args.gdpr.lower() == 'true':
+        print('Got it.')
+        start_http_server(args.port)
+        print('listening on port {}.'.format(args.port))
+        REGISTRY.register(SpeedtestCollector())
+        while True:
+            time.sleep(1)
+    else:
+        print('You need to accept Ookla\'s license and GDPR to use this exporter.')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Speedtest exporter for prometheus.')
     parser.add_argument('--port', type=int, default=8000,required=False,
                         help='Port to listen for requests.')
     parser.add_argument('--server', type=int, default=0, required=False,
+                        help='Number of server to test.')
+    parser.add_argument('--license', type=str, required=True,
+                        help='Number of server to test.')
+    parser.add_argument('--gdpr', type=str, required=True,
                         help='Number of server to test.')
     args = parser.parse_args()
 
